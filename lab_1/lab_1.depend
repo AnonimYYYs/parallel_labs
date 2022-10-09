@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1665318121 source:/home/anonimys/Code/CProjects/lab_1/main.c
+	<stdio.h>
+	<stdlib.h>
+	<pthread.h>
+
