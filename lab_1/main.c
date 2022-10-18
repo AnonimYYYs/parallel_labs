@@ -9,7 +9,8 @@ struct FunParams {
     int str_len;
     int threads_num;
     int curr_thread_num;
-    int* output_array;
+    pthread_mutex_t *mutex;
+    int* result;
 };
 
 // thread function
@@ -19,30 +20,29 @@ void *count_strings_common_char(void* recieved_params)
     struct FunParams* params;
     params = (struct FunParams *) recieved_params;
 
-    // create counter of same elements
-    int not_same_count = 0;
 
     // looping for all elements for given thread
     for (int ind = params->curr_thread_num; ind < params->str_len; ind += params->threads_num){
         if (params->string_1[ind] != params->string_2[ind]) {
-            not_same_count += 1;
+            pthread_mutex_lock(params->mutex);
+            (*params->result)++;
+            pthread_mutex_unlock(params->mutex);
         }
     }
-    params->output_array[params->curr_thread_num] = not_same_count;
 }
 
 
 int main()
 {
     // changeable variables
-	const int str_size = 256 * 1024; // string size
-	const int threads_amount = 1; // amount of threads
+	const int str_size = 10; // string size
+	const int threads_amount = 3; // amount of threads
 
     int i;
 
     // random string params setup
     srand((unsigned int)(time(NULL)));
-	char rnd_charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/,.-+=~`<>:";
+	char rnd_charset[] = "ab";//cdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/,.-+=~`<>:";
 
     // defining two strings
 	char first_string[str_size+1];
@@ -57,15 +57,16 @@ int main()
 	second_string[str_size] = '\0';
 
     // print to see strings
-    // printf("%s\n", first_string);
-    // printf("%s\n", second_string);
+    printf("%s\n", first_string);
+    printf("%s\n", second_string);
 
 
-    // making output array for each thread
-    int counter[threads_amount];
-    for (i = 0; i < threads_amount; i++) {
-        counter[i] = 0;
-	};
+    // initiate mutex
+    pthread_mutex_t mutex;
+    pthread_mutex_init(&mutex, NULL);
+
+    // result variable
+    int result = 0;
 
     // creating threads
     pthread_t threads[threads_amount];
@@ -75,9 +76,10 @@ int main()
         params->string_1 = first_string;
         params->string_2 = second_string;
         params->curr_thread_num = i;
-        params->output_array = counter;
         params->str_len = str_size;
         params->threads_num = threads_amount;
+        params->mutex = &mutex;
+        params->result = &result;
 
         pthread_create(&threads[i], NULL, count_strings_common_char, params);
 	}
@@ -88,10 +90,6 @@ int main()
     }
 
     // summing up results of all threads
-    int result = 0;
-    for (i = 0; i < threads_amount; i++) {
-        result += counter[i];
-	}
 	printf("there are total %d symbols\n", str_size);
 	printf("there are %d NOT same symbols\n", result);
 	printf("there are %d same symbols\n", str_size-result);
