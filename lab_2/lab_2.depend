@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1669041698 source:/home/anonimys/Code/CProjects/lab_2/main.c
+	<stdio.h>
+	<stdlib.h>
+	<omp.h>
+
