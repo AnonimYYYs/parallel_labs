@@ -33,8 +33,8 @@ int main()
 	second_string[str_size] = '\0';
 
     // print to see strings
-    printf("%s\n", first_string);
-    printf("%s\n", second_string);
+    //printf("%s\n", first_string);
+    //printf("%s\n", second_string);
 
 	// start time count
     begin_time = omp_get_wtime();
@@ -43,6 +43,7 @@ int main()
     int result = 0;
     int local_result = 0;
 
+    omp_set_num_threads(threads_amount);
 
     // counting loop
 
