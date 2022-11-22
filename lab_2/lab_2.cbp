@@ -30,7 +30,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="fopenmp" />
+			<Add option="-fopenmp" />
 		</Compiler>
 		<Linker>
 			<Add library="/lib/llvm-10/lib/libgomp.so" />
