@@ -3,15 +3,6 @@
 #include <time.h>
 #include <mpi.h>
 
-// params to be passed inside thread function
-struct FunParams {
-    char* string_1;
-    char* string_2;
-    int str_len;
-    int threads_num;
-    int curr_thread_num;
-};
-
 
 int main(int argc, char** argv)
 {
