@@ -1,0 +1,4 @@
+﻿  main.c
+  main.cpp
+x64\Debug\main.obj : warning LNK4042: object specified more than once; extras ignored
+  lab_3.vcxproj -> C:\MyProjects\CppProject\lab_3\x64\Debug\lab_3.exe
